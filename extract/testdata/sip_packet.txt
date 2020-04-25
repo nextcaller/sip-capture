@@ -1,0 +1,7 @@
+INVITE foo@bar SIP/2.0
+t: foo@bar.tagg
+i: 12345678@foo.com
+From: bar@foo.com;tag=xyz
+l: 0
+
+

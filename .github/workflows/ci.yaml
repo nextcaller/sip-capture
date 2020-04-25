@@ -1,0 +1,57 @@
+name: CI
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    env:
+      VERBOSE: 1
+      GOFLAGS: -mod=readonly
+    steps:
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.14
+      - name: Check out code
+        uses: actions/checkout@v2
+      - name: Lint
+        uses: golangci/golangci-lint-action@v2
+        version: v1.28
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    env:
+      VERBOSE: 1
+      GOFLAGS: -mod=readonly
+    steps:
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.14
+      - name: Check out code
+        uses: actions/checkout@v2
+      - name: Run unit tests.
+        run: make test
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    needs: [lint, test]
+    env:
+      VERBOSE: 1
+      GOFLAGS: -mod=readonly
+    steps:
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.14
+      - name: Check out code
+        uses: actions/checkout@v2
+      - name: Build
+        run: make build

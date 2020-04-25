@@ -1,0 +1,168 @@
+version: "2.2"
+# This docker-compose file has everything needed to run local manual tests.
+# It also serves as an example of a minimal deployment configuration using the
+# sip-capture docker image.
+#
+# This is not suitable to use for direct production use; modify it for your
+# environment.
+
+# The capture agent needs access to the right network in order to listen to
+# arbitrary packets, all other containers that it needs to talk to must also be
+# in the same network mode.  You cannot mix bridge and host containers in any
+# reasonable fashion.  In order to avoid swapping each individual container's
+# network line, we have one "network" container, who owns the network_mode
+# configuration, and each other container uses the "network" container's network
+# namespace.  This setup is similar to how a Kubernetes pod or AWS ECS task works.
+
+services:
+  # Network access container.  All other services use "network_mode: service:network"
+  # to share the networking from this container.  Thus everything appears to be on
+  # "localhost", and only this container needs to move from bridge to host or back.
+  network:
+    image: alpine:latest
+    init: true
+
+    # If we want to see outside traffic, we want to be in host or macvlan to be
+    # able to see the real host interfaces.  In a world where our SIP target is
+    # part of the same docker environment, we would attach this container the
+    # appropriate docker network.
+    #
+    # network_mode: host
+
+    # For testing, we can just live in a single bridge network, since we've got
+    # our sipp uac/uas containers below to provide traffic.
+    #
+    # If we're in host mode, comment these out.
+    ports:
+      - "1883:1883"  # Expose the mqtt broker
+      - "9900:9900"  # Expose the default Prometheus endpoint from sip-capture
+      - "9090:9090"  # expose prometheus dashboard
+      - "3000:3000"  # expose grafana dashboard
+
+    command: ["/usr/bin/tail", "-f", "/dev/null"]
+
+  sip-capture:
+    # image: nextcaller/sip-capture:latest
+    build: .
+    restart: "always"
+    network_mode: "service:network"
+    environment:
+      # In prod, set to the interface that faces the SIP-bearing network
+      INTERFACE: "lo"
+      # Set appropriate ports, may need 'or (ip[6:2] & 0x1fff) != 0' if IP fragmentation is common.
+      BPF_FILTER: "port 5060"
+      # Default to capturing the request legs of each invite.
+      SIP_FILTER: "(all (methods invite) request)"
+      # debug, info, warning, error; debug is quite noisy, info fairly silent.
+      LOG_LEVEL: "debug"
+      # What address:port we expose the Prometheus /metrics endpoint on.
+      METRICS_ADDR: "0.0.0.0:9900"
+      # MQTT broker.  Since we're using the network container, use localhost, not the mqtt container name.
+      BROKER: "tcp://localhost:1883"
+      # set a client ID.
+      CLIENT_ID: "docker-test-agent"
+      # Our default testing topic.
+      TOPIC: "/test/sip"
+      # If we were using TLS, we'd uncomment and set these.
+      # KEY_FILE: "${KEY_PATH}"
+      # CERT_FILE: "${CERT_PATH}"
+    volumes:
+      - "${CERT_PATH:-/dev/null}:/etc/tls/client-key.pem:ro"
+      - "${KEY_PATH:-/dev/null}:/etc/tls/client-cert.pem:ro"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "10"
+
+  # A local MQTT broker to test against.
+  # In a prod env, we would point the sip-capture agent at a real production
+  # broker deployment, or provide a mosquitto.conf config that bridges this
+  # instance a centralized broker.
+  mqtt:
+    image: "eclipse-mosquitto:latest"
+    restart: "always"
+    network_mode: "service:network"
+    # per above, we're using the network container to own access to the outside
+    # world, so ports would be exposed there.
+    # ports:
+    #    - "1883"
+    #    - "9001"
+    volumes:
+      # By default, just use anonymous docker volumes.
+      - /mosquitto/log
+      - /mosquitto/data
+      # For local testing, we don't need any special config.
+      # - /path/to/custom/mosquitto.conf:/mosquitto/config
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "10"
+
+  # This will log everything sent to our default /test/ topics, for easy
+  # observation of testing capture.
+  mqtt-trace:
+    image: efrecon/mqtt-client
+    depends_on:
+      - mqtt
+    restart: unless-stopped
+    network_mode: "service:network"
+    command: ["sub", "-h", "localhost", "-t", "/test/#", "-v"]
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "10"
+
+  # This creates a sipp running in UAS scenario in UDP mode, which can answer calls.
+  mock-uas:
+    build:
+      context: etc/docker-sipp
+      dockerfile: Dockerfile
+    network_mode: "service:network"
+    command: sipp -f 30 -nostdin -sn uas -t u1  -i 127.0.0.1
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "10"
+
+  # This creates a sipp running in UAC scenario in UDP mode, making one call per second.
+  mock-uac:
+    restart: "unless-stopped"
+    build:
+      context: etc/docker-sipp
+      dockerfile: Dockerfile
+    network_mode: "service:network"
+    command: sipp -f 30 -nostdin -sn uac -rp 10s -r 10 -t un 127.0.0.1:5060
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "10"
+
+  # Simple monitoring prometheus container, for exploring metrics from testing.
+  prometheus:
+    image: prom/prometheus:latest
+    network_mode: "service:network"
+    volumes:
+      - "./etc/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "10"
+
+  # Simple grafana dashboard to expose prometheus.
+  grafana:
+    image: grafana/grafana:latest
+    depends_on:
+      - prometheus
+    network_mode: "service:network"
+    volumes:
+      - "./etc/grafana/datasource.yaml:/etc/grafana/provisioning/datasources/datasource.yaml"
+    environment:
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: "Admin"

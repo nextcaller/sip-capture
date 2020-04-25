@@ -1,0 +1,31 @@
+INVITE sip:001234567890@10.135.0.1:5060;user=phone SIP/2.0
+Via: SIP/2.0/UDP 10.135.0.12:5060;branch=z9hG4bKhye0bem20x.nx8hnt
+Max-Forwards: 70
+From: "Calling User" <sip:151@10.135.0.1:5060>;tag=m3l2hbp
+To: <sip:001234567890@10.135.0.1:5060;user=phone>
+Call-ID: ud04chatv9q@10.135.0.1
+CSeq: 10691 INVITE
+Contact: <sip:151@10.135.0.12;line=12071>;+sip.instance="<urn:uuid:0d9a008d-0355-0024-0004-000276f3d664>"
+Allow: INVITE, CANCEL, BYE, ACK, REGISTER, OPTIONS, REFER, SUBSCRIBE, NOTIFY, MESSAGE, INFO, PRACK, UPDATE
+Content-Disposition: session
+Supported: replaces,100rel
+User-Agent: Wildix W-AIR 03.55.00.24 9c7514340722 02:76:f3:d6:64
+Content-Type: application/sdp
+Content-Length: 254
+X-Foo: first
+X-Foo: second
+
+v=0
+o=151 9655 9655 IN IP4 10.135.0.12
+s=-
+c=IN IP4 10.135.0.12
+t=0 0
+m=audio 50024 RTP/AVP 8 0 2 18
+a=rtpmap:8 PCMA/8000
+a=rtpmap:0 PCMU/8000
+a=rtpmap:2 G726-32/8000/1
+a=rtpmap:18 G729/8000
+a=ptime:20
+a=maxptime:80
+a=sendrecv
+a=rtcp:50025

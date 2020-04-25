@@ -1,0 +1,6 @@
+INVITE foo@bar SIP/2.0
+To: foo@bar.tagg
+Call-ID: 12345678@foo.com
+From: bar@foo.com;tag=xyz
+
+

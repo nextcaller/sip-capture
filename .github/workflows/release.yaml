@@ -1,0 +1,37 @@
+name: Release
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    name: Release on GitHub
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v1
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.14
+      - name: Create release on GitHub
+        uses: goreleaser/goreleaser-action@v2
+        with:
+          args: release --rm-dist
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+  # docker:
+  #   name: Docker Image
+  #   uses: docker/build-push-action@v1
+  #   with:
+  #     username: ${{ DOCKER_USERNAME }}
+  #     password: ${{ DOCKER_PASSWORD }}
+  #     registry: myregistry
+  #     repository: nextcaller/sip-capture
+  #     tag_with_ref: true
+  #     build_args: BUILD_REF=${{}} VERSION=${{}} BUILD_DATE=${{}}
+  #     push: ${{ startsWith(github.ref, 'refs/tags/' }}
+
+  # nfpm?

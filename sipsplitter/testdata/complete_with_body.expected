@@ -1,0 +1,24 @@
+{
+  "Original": "INVITE foo@bar SIP/2.0\r\nContent-Length: 11\r\n\r\nhello world",
+  "Discarded": 0,
+  "NoStartLine": 0,
+  "StartLine": 1,
+  "NoHeaders": 0,
+  "Header": 1,
+  "NoBody": 0,
+  "Body": 1,
+  "Complete": 1,
+  "Discards": [],
+  "Starts": [
+    "INVITE foo@bar SIP/2.0\r\n"
+  ],
+  "Headers": [
+    "Content-Length: 11\r\n"
+  ],
+  "Bodies": [
+    "hello world"
+  ],
+  "Messages": [
+    "INVITE foo@bar SIP/2.0\r\nContent-Length: 11\r\n\r\nhello world"
+  ]
+}

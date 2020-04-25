@@ -1,0 +1,132 @@
+run:
+  deadline: 1m
+  issues-exit-code: 1
+  tests: false
+  skip-dirs:
+    - defrag  # This is 3p code.
+    - local
+
+linters:
+  enable:
+    - golint
+    - gosec
+    - interfacer
+    - unconvert
+    - dupl
+    - goconst
+    - gofmt
+    - goimports
+    - maligned
+    - misspell
+    - lll
+    - unparam
+    - scopelint
+    - prealloc
+    - gocritic
+    - godox
+    - goerr113
+
+output:
+  format: colored-line-number
+  print-issued-lines: true
+  print-linter-name: true
+
+linters-settings:
+  errcheck:
+    # report about not checking of errors in type assetions: `a := b.(MyStruct)`;
+    # default is false: such cases aren't reported by default.
+    check-type-assertions: false
+
+    # report about assignment of errors to blank identifier: `num, _ := strconv.Atoi(numStr)`;
+    # default is false: such cases aren't reported by default.
+    check-blank: false
+  govet:
+    # Obtain type information from installed (to $GOPATH/pkg) package files:
+    # golangci-lint will execute `go install -i` and `go test -i` for analyzed packages
+    # before analyzing them.
+    # Enable this option only if all conditions are met:
+    #  1. you use only "fast" linters (--fast e.g.): no program loading occurs
+    #  2. you use go >= 1.10
+    #  3. you do repeated runs (false for CI) or cache $GOPATH/pkg or `go env GOCACHE` dir in CI.
+    use-installed-packages: false
+  goimports:
+    local: "github.com/nextcaller/sip-capture"
+  golint:
+    min-confidence: 0.8
+  gofmt:
+    simplify: false
+  gocyclo:
+    min-complexity: 12
+  maligned:
+    suggest-new: true
+  dupl:
+    threshold: 150
+  goconst:
+    min-len: 3
+    min-occurrences: 3
+  misspell:
+    locale: US
+  lll:
+    line-length: 140
+    tab-width: 1
+  unused:
+    # treat code as a program (not a library) and report unused exported identifiers; default is false.
+    # if you enable this setting, unused will report a lot of false-positives in text editors:
+    # if it's called for subdir of a project it can't find funcs usages. All text editor integrations
+    # with golangci-lint call it on a directory with the changed file.
+    check-exported: false
+  unparam:
+    # call graph construction algorithm (cha, rta). In general, use cha for libraries,
+    # and rta for programs with main packages. Default is cha.
+    algo: cha
+
+    # Inspect exported functions, default is false. Set to true if no external program/library imports your code.
+    # if you enable this setting, unparam will report a lot of false-positives in text editors:
+    # if it's called for subdir of a project it can't find external interfaces. All text editor integrations
+    # with golangci-lint call it on a directory with the changed file.
+    check-exported: false
+  nakedret:
+    # make an issue if func has more lines of code than this setting and it has naked returns; default is 30
+    max-func-lines: 30
+  prealloc:
+    # Report preallocation suggestions only on simple loops that have no returns/breaks/continues/gotos in them.
+    # True by default.
+    simple: true
+    range-loops: true # Report preallocation suggestions on range loops, true by default
+    for-loops: false # Report preallocation suggestions on for loops, false by default
+  gocritic:
+    enabled-tags:
+      - diagnostic
+      - performance
+      - style
+      - experimental
+    disabled-checks:
+      - paramTypeCombine
+      - unnamedResult
+        # - wrapperFunc
+      - rangeValCopy
+      - hugeParam
+
+issues:
+  max-per-linter: 0
+  max-same: 0
+  new: false
+  exclude-use-default: false
+
+  exclude-rules:
+    # Test files and testhelper library get a pass on certain linters, since
+    # they're not production code.
+    - path: _test\.go
+      linters:
+        - gosec
+        - errcheck
+    - path: testhelpers
+      linters:
+        - gosec
+        - errcheck
+        - gochecknoinits
+
+    # defrag is actually a copy of 3rd party gopacket source; don't lint
+    - path: defrag
+      linters:
+        - gosimple

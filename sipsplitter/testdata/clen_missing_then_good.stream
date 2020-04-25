@@ -1,0 +1,5 @@
+INVITE foo@bar SIP/2.0
+
+SIP/2.0 200 OK
+Content-Length: 0
+

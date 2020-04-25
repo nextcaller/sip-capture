@@ -1,0 +1,18 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.1.0
+    hooks:
+      - id: no-commit-to-branch
+        args: [ --branch, master ]
+      - id: end-of-file-fixer
+        exclude: testdata/*
+      - id: trailing-whitespace
+        exclude: testdata/*
+      - id: check-merge-conflict
+      - id: check-json
+      - id: check-yaml
+      - id: detect-aws-credentials
+  - repo: https://github.com/golangci/golangci-lint
+    rev: v1.27.0
+    hooks:
+      - id: golangci-lint

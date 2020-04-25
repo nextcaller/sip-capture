@@ -1,0 +1,16 @@
+{
+  "Original": "SIP/2.0 OK\r\nContent-Length: 0\r\n\r\n",
+  "Discarded": 0,
+  "NoStartLine": 1,
+  "StartLine": 0,
+  "NoHeaders": 0,
+  "Header": 0,
+  "NoBody": 0,
+  "Body": 0,
+  "Complete": 0,
+  "Discards": [],
+  "Starts": [],
+  "Headers": [],
+  "Bodies": [],
+  "Messages": []
+}
