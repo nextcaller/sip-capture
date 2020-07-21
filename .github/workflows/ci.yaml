@@ -20,7 +20,7 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v2
       - name: Install libpcap
-        run: apt-get update && apt-get install -y libpcap-dev
+        run: sudo apt-get update && sudo apt-get install -y libpcap-dev
       - name: Lint
         uses: golangci/golangci-lint-action@v2
         with:
@@ -40,7 +40,7 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v2
       - name: Install libpcap
-        run: apt-get update && apt-get install -y libpcap-dev
+        run: sudo apt-get update && sudo apt-get install -y libpcap-dev
       - name: Run unit tests.
         run: make test
 
@@ -59,6 +59,6 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v2
       - name: Install libpcap
-        run: apt-get update && apt-get install -y libpcap-dev
+        run: sudo apt-get update && sudo apt-get install -y libpcap-dev
       - name: Build
         run: make build
