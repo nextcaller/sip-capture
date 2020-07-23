@@ -34,7 +34,7 @@ type Collecter struct {
 	msgs    chan *layers.SIP
 }
 
-// NewCollecter returns a Collector that accepts messages that pass the match
+// NewCollecter returns a Collecter that accepts messages that pass the match
 // filter, then uses publish to emit them.  depth controls how many messages
 // may be internally queued before discarding excess.
 func NewCollecter(match filters.Filter, publish publisher, depth int) *Collecter {
