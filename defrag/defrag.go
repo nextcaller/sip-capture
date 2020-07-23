@@ -1,7 +1,8 @@
-// Some operators and hardware send UDP packets which are fragmented with with
-// sizes that gopacket does not like.  So we're maintaining a local copy of the
+// Some operators and hardware send UDP packets which are fragmented with sizes
+// that gopacket does not like.  So we're maintaining a local copy of the
 // original gopacket ipv4defrag package with the MinimumFragmentSize set to 1
-// to be able to handle these out of packets which would otherwise choke gopacket.
+// to be able to handle these out of packets which would otherwise choke
+// gopacket.
 
 // Copyright 2013 Google, Inc. All rights reserved.
 //

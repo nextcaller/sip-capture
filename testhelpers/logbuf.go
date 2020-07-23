@@ -5,7 +5,7 @@ import (
 	"sync"
 )
 
-// LogBuf is a syncronized io.Writer.  It's meant to prevent any race detection
+// LogBuf is a synchronized io.Writer.  It's meant to prevent any race detection
 // on loggers in background go routines if you use a raw bytes.Buffer.
 //
 // Typical usage pattern with zerolog looks something like:

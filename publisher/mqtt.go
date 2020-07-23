@@ -23,7 +23,7 @@ const (
 	// keepaliveTimeout is how often to make MQTT Keepalive requests.
 	keepaliveTimeout = time.Second * 30
 
-	// disconnectQueiece is how long to wait for the server during disconnects;
+	// disconnectQueisce is how long to wait for the server during disconnects;
 	// measured in milliseconds.  see `go doc paho.mqtt.golang.Client.Disconnect`
 	disconnectQuiesce = 250
 )

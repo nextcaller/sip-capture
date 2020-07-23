@@ -111,7 +111,7 @@ func (e *Extracter) rebuildPacket(packet gopacket.Packet, ip4 *layers.IPv4) erro
 
 	if ip4.Length != l {
 		if err := reinsertIPv4(packet, ip4); err != nil {
-			return fmt.Errorf("resinerting ip4 back into packet: %w", err)
+			return fmt.Errorf("reinserting ip4 back into packet: %w", err)
 		}
 	}
 	return nil
