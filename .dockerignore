@@ -1,0 +1,7 @@
+local
+Dockerfile
+tools
+etc
+docs
+*.md
+.git

@@ -1,0 +1,24 @@
+{
+  "Original": "INVITE sip:sip.provider.com SIP/2.0\r\nVia:SIP/2.0/UDP 172.16.254.66:5060;branch=z9hG4bK3e5380d454981e88702eb2269669462;rport\r\nFrom:\"Bob\" \u003csip:bob@sip.provider.com\u003e;tag=3718850509\r\nTo:\"Alice\" \u003csip:alice@sip.provider.com\u003e\r\nCall-ID:306366781@172_16_254_66\r\nCSeq:3 INVITE\r\nMax-Forwards:70\r\nAllow:INVITE,ACK,CANCEL,BYE,OPTIONS,INFO,SUBSCRIBE,NOTIFY,REFER,UPDATE\r\nContact: \u003csip:bob@172.16.254.66:5060\u003e\r\nExpires:1800\r\nUser-Agent:C530 IP/42.245.00.000.000\r\nContent-Length:11\r\n\r\nHello World\r\n",
+  "Discarded": 0,
+  "NoStartLine": 1,
+  "StartLine": 1,
+  "NoHeaders": 0,
+  "Header": 1,
+  "NoBody": 0,
+  "Body": 1,
+  "Complete": 1,
+  "Discards": [],
+  "Starts": [
+    "INVITE sip:sip.provider.com SIP/2.0\r\n"
+  ],
+  "Headers": [
+    "Via:SIP/2.0/UDP 172.16.254.66:5060;branch=z9hG4bK3e5380d454981e88702eb2269669462;rport\r\nFrom:\"Bob\" \u003csip:bob@sip.provider.com\u003e;tag=3718850509\r\nTo:\"Alice\" \u003csip:alice@sip.provider.com\u003e\r\nCall-ID:306366781@172_16_254_66\r\nCSeq:3 INVITE\r\nMax-Forwards:70\r\nAllow:INVITE,ACK,CANCEL,BYE,OPTIONS,INFO,SUBSCRIBE,NOTIFY,REFER,UPDATE\r\nContact: \u003csip:bob@172.16.254.66:5060\u003e\r\nExpires:1800\r\nUser-Agent:C530 IP/42.245.00.000.000\r\nContent-Length:11\r\n"
+  ],
+  "Bodies": [
+    "Hello World"
+  ],
+  "Messages": [
+    "INVITE sip:sip.provider.com SIP/2.0\r\nVia:SIP/2.0/UDP 172.16.254.66:5060;branch=z9hG4bK3e5380d454981e88702eb2269669462;rport\r\nFrom:\"Bob\" \u003csip:bob@sip.provider.com\u003e;tag=3718850509\r\nTo:\"Alice\" \u003csip:alice@sip.provider.com\u003e\r\nCall-ID:306366781@172_16_254_66\r\nCSeq:3 INVITE\r\nMax-Forwards:70\r\nAllow:INVITE,ACK,CANCEL,BYE,OPTIONS,INFO,SUBSCRIBE,NOTIFY,REFER,UPDATE\r\nContact: \u003csip:bob@172.16.254.66:5060\u003e\r\nExpires:1800\r\nUser-Agent:C530 IP/42.245.00.000.000\r\nContent-Length:11\r\n\r\nHello World"
+  ]
+}

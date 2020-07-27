@@ -1,0 +1,3 @@
+INVITE foo@bar SIP/2.0
+Content-Length: 1
+

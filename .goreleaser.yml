@@ -1,0 +1,41 @@
+env:
+  - GO111MODULE=on
+
+before:
+  hooks:
+    - go mod download
+
+builds:
+  - goos:
+      - linux
+    goarch:
+      - amd64
+    mod_timestamp: '{{ .CommitTimestamp }}'
+    flags:
+      - -trimpath
+    ldflags:
+      - -s -w -X main.Version={{.Tag}} -X main.Build={{.Commit}} -X main.Date={{.CommitDate }} -X main.Branch={{.Branch}}
+
+checksum:
+  name_tamplate: '{{ .ProjectName }}_checksums.txt'
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+      - Merge pull request
+      - Merge branch
+      - go mod tidy
+
+dockers:
+  - image_templates:
+    - 'nextcaller/sip-capture:{{ .Tag }}'
+    - 'nextcaller/sip-capture:v{{ .Major }}.{{ .Minor }}'
+    - 'nextcaller/sip-capture:latest'
+    dockerfile: Dockerfile
+    binaries:
+      - sip-capture
+    build_flag_templates:
+      - "--build-arg VERSION={{.Version}}"

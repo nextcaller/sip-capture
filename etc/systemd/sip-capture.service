@@ -1,0 +1,18 @@
+# Investigate adding sandboxing
+# need access jo network capture device
+# CapabilityBoundingSet=CAP_NET_RAW
+# and network device for sending over mqtt.
+
+[Unit]
+Description=Capture SIP packets and export them over MQTT
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/path/to/bin/sip-capture
+WorkingDirectory=/some/safe/path
+Restart=on-failure
+RestartSec=10s
+
+[Install]
+WantedBy=multi-user.target

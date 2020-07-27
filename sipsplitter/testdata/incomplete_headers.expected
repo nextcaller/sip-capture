@@ -1,0 +1,18 @@
+{
+  "Original": "INVITE foo@bar SIP/2.0\r\nCont",
+  "Discarded": 0,
+  "NoStartLine": 0,
+  "StartLine": 1,
+  "NoHeaders": 1,
+  "Header": 0,
+  "NoBody": 0,
+  "Body": 0,
+  "Complete": 0,
+  "Discards": [],
+  "Starts": [
+    "INVITE foo@bar SIP/2.0\r\n"
+  ],
+  "Headers": [],
+  "Bodies": [],
+  "Messages": []
+}
