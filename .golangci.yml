@@ -10,13 +10,11 @@ linters:
   enable:
     - golint
     - gosec
-    - interfacer
     - unconvert
     - dupl
     - goconst
     - gofmt
     - goimports
-    - maligned
     - misspell
     - lll
     - unparam
@@ -25,6 +23,15 @@ linters:
     - gocritic
     - godox
     - goerr113
+    - exportloopref
+    - nestif
+    - revive
+    - prealloc
+    - thelper
+    - tparallel
+    - unparam
+    - whitespace
+    - wrapcheck
 
 output:
   format: colored-line-number
