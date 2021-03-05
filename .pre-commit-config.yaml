@@ -5,14 +5,14 @@ repos:
       - id: no-commit-to-branch
         args: [ --branch, master ]
       - id: end-of-file-fixer
-        exclude: testdata/*
+        exclude: testdata/.*
       - id: trailing-whitespace
-        exclude: testdata/*
+        exclude: testdata/.*
       - id: check-merge-conflict
       - id: check-json
       - id: check-yaml
       - id: detect-aws-credentials
   - repo: https://github.com/golangci/golangci-lint
-    rev: v1.27.0
+    rev: v1.38.0
     hooks:
       - id: golangci-lint
