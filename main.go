@@ -121,7 +121,9 @@ func run(args []string, stdout io.Writer) error {
 		srv := &http.Server{Handler: mux, Addr: cfg.MetricsAddr}
 		// Since we never call srv.Shutdown(), ListenAndServe will only ever
 		// return if the underlying socket fails.
-		go log.Err(srv.ListenAndServe()).Msg("http metrics endpoint failed")
+		go func() {
+			log.Err(srv.ListenAndServe()).Msg("http metrics endpoint failed")
+		}()
 	}
 
 	log.Debug().Msg("beginning signaling capture")
