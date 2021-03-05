@@ -162,11 +162,11 @@ func (e *Extracter) Extract(ctx context.Context, packets <-chan gopacket.Packet,
 
 			if someAssemblyRequired(ip4) {
 				err := e.rebuildPacket(packet, ip4)
-				switch err {
-				case nil:
+				switch {
+				case err == nil:
 					// No err, packet is now updated with new assembled ipv4 layer.
 					e.metrics.Defrag.Inc()
-				case errIncomplete:
+				case errors.Is(err, errIncomplete):
 					e.metrics.Fragments.Inc()
 					log.Debug().Msg("incomplete ipv4 fragment, continuing")
 					continue

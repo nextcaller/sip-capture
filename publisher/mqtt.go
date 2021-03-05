@@ -115,7 +115,10 @@ func tlsCfgFromFiles(key, cert string) (*tls.Config, error) {
 	if err != nil {
 		return nil, fmt.Errorf("loading tls keypair: %w", err)
 	}
-	cfg := &tls.Config{Certificates: []tls.Certificate{certs}}
+	cfg := &tls.Config{
+		Certificates: []tls.Certificate{certs},
+		MinVersion:   tls.VersionTLS12,
+	}
 	return cfg, nil
 }
 
